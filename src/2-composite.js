@@ -2,10 +2,6 @@ class DocumentRender {
   dispatchRender() {
     document.dispatchEvent(new Event("Render"));
   }
-  runInRender(cb) {
-    cb();
-    this.dispatchRender();
-  }
 }
 
 class List extends DocumentRender {
@@ -18,14 +14,23 @@ class List extends DocumentRender {
   }
   render() {
     const ul = document.createElement("ul");
+    const childrenCount = this.children.length;
     this.children.forEach((item, index) => {
-      let position = "middle";
-      if (index === 0) position = "start";
-      // 2 because we always have a last element with input;
-      if (index === this.children.length - 2) position = "end";
+      const position = this.calculateChildPosition(index);
       ul.appendChild(item.render(position));
     });
     return ul;
+  }
+  calculateChildPosition(index) {
+    const childrenCount = this.children.length;
+    // 2 because we always have a last element with input;
+    let position = childrenCount === 2 ? "single" : "middle";
+    if (position !== "single") {
+      if (index === 0) position = "start";
+      // 2 because we always have a last element with input;
+      if (index === childrenCount - 2) position = "end";
+    }
+    return position;
   }
   remove(element) {
     const index = this.children.findIndex((item) => item === element);
@@ -48,12 +53,6 @@ class List extends DocumentRender {
   }
   addItem(name) {
     const item = new TodoItem(this, name);
-    const place = this.children.length - 1;
-    this.children.splice(place, 0, item);
-    this.dispatchRender();
-  }
-  addFakeItem() {
-    const item = new FakeItem();
     const place = this.children.length - 1;
     this.children.splice(place, 0, item);
     this.dispatchRender();
@@ -120,20 +119,22 @@ class TodoItem extends DocumentRender {
     span.innerText = this.name;
     renderList.push(span);
 
-    // BUTTON UP
-    if (position !== "start") {
-      const buttonUp = document.createElement("button");
-      buttonUp.innerHTML = "&uarr;";
-      buttonUp.addEventListener("click", () => this.parent.moveUp(this));
-      renderList.push(buttonUp);
-    }
+    if (position !== "single") {
+      // BUTTON UP
+      if (position !== "start") {
+        const buttonUp = document.createElement("button");
+        buttonUp.innerHTML = "&uarr;";
+        buttonUp.addEventListener("click", () => this.parent.moveUp(this));
+        renderList.push(buttonUp);
+      }
 
-    // BUTTON DOWN
-    if (position !== "end") {
-      const buttonDown = document.createElement("button");
-      buttonDown.innerHTML = "&darr;";
-      buttonDown.addEventListener("click", () => this.parent.moveDown(this));
-      renderList.push(buttonDown);
+      // BUTTON DOWN
+      if (position !== "end") {
+        const buttonDown = document.createElement("button");
+        buttonDown.innerHTML = "&darr;";
+        buttonDown.addEventListener("click", () => this.parent.moveDown(this));
+        renderList.push(buttonDown);
+      }
     }
 
     // BUTTON ADD SUBLIST
@@ -175,7 +176,8 @@ const children = [InputItem];
 const list = new List(children);
 
 const registerTodoList = (rootSelector) => {
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", (e) => {
+    console.log("DOMContentLoaded", e);
     const root = document.querySelector(rootSelector);
     root.appendChild(list.render());
 
