@@ -63,6 +63,14 @@ h1 {
   color: #888;
 }
 
+li > :not(:first-child) {
+  margin-left: 0.5em;
+}
+
+ul > :not(:first-child) {
+  margin-top: 0.5em;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
