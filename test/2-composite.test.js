@@ -9,7 +9,7 @@ import { describe, it, beforeEach } from "node:test";
 import assert from "node:assert";
 import { List, TodoItem, InputItem } from "./../src/2-composite.js";
 
-describe("Todo List", () => {
+describe("Composite: Todo List functionality", () => {
   beforeEach(() => {
     const dom = new JSDOM(`<!DOCTYPE html><div id="app"></div>`);
     global.document = dom.window.document;
@@ -52,10 +52,9 @@ describe("Todo List", () => {
     assert.strictEqual(list.children.length, 2);
     assert.strictEqual(list.children[0].name, "test2");
   });
-
 });
 
-describe("Render", () => {
+describe("Composite: Render", () => {
   beforeEach(() => {
     const dom = new JSDOM(`<!DOCTYPE html><div id="app"></div>`);
     global.document = dom.window.document;
@@ -104,9 +103,17 @@ describe("Render", () => {
     assert.strictEqual(ul.children[1].children[1].innerHTML, "↑");
     assert.strictEqual(ul.children[1].children[2].innerHTML, "↓");
   });
+  it("List addItem should be called on 'Add' button click", (t) => {
+    const list = new List([InputItem]);
+    t.mock.method(list, "addItem");
+    list.addItem("test");
+    const ul = list.render();
+    ul.children[0].children[1].click();
+    assert.strictEqual(list.addItem.mock.callCount(), 1);
+  });
 });
 
-describe("Todo Item", () => {
+describe("Composite: Todo Item", () => {
   beforeEach(() => {
     const dom = new JSDOM(`<!DOCTYPE html><div id="app"></div>`);
     global.document = dom.window.document;
@@ -117,5 +124,4 @@ describe("Todo Item", () => {
     const item = new TodoItem(null, "test");
     assert.strictEqual(item.name, "test");
   });
-
 });

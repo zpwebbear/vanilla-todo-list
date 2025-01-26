@@ -41,7 +41,8 @@ class TodoListMediator {
   }
   addSublist(item) {
     const mediator = new TodoListMediator();
-    const list = new List(mediator, [InputItem]);
+    const inputItem = new InputItem(mediator);
+    const list = new List(mediator, [inputItem]);
     mediator.setList(list);
     item.list = list;
     this.dispatchRender();
@@ -51,7 +52,7 @@ class TodoListMediator {
     this.dispatchRender();
   }
   dispatchRender() {
-    document.dispatchEvent(new Event("Render"));
+    document.dispatchEvent(new window.Event("Render"));
   }
 }
 
@@ -60,9 +61,7 @@ class List {
   mediator = null;
   constructor(mediator, children = []) {
     this.mediator = mediator;
-    children.forEach((Child) => {
-      this.children.push(new Child(this.mediator));
-    });
+    this.children = children;
   }
   get todoItemsCount() {
     return this.children.length - 1;
@@ -225,4 +224,4 @@ const registerTodoList = (rootSelector) => {
   });
 };
 
-export { registerTodoList };
+export { registerTodoList, TodoListMediator, List, InputItem, TodoItem };
