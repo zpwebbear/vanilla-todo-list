@@ -1,6 +1,6 @@
 class DocumentRender {
   dispatchRender() {
-    document.dispatchEvent(new Event("Render"));
+    document.dispatchEvent(new window.Event("Render"));
   }
 }
 
@@ -187,4 +187,4 @@ const registerTodoList = (rootSelector) => {
   });
 };
 
-export { registerTodoList };
+export { registerTodoList, List, InputItem, TodoItem };
