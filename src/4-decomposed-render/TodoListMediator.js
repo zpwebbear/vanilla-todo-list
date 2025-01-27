@@ -22,6 +22,7 @@ class TodoListMediator {
     const item = new TodoItem(this, name);
     const place = this.list.todoItemsCount;
     this.list.insertItemByIndex(place, item);
+    sender.name = "";
     this.dispatchRender();
   }
   removeItem(item) {
