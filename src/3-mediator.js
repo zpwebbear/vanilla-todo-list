@@ -212,7 +212,8 @@ class TodoItem {
 
 const registerTodoList = (rootSelector) => {
   const mediator = new TodoListMediator();
-  const children = [InputItem];
+  const inputItem = new InputItem(mediator);
+  const children = [inputItem];
   const list = new List(mediator, children);
   mediator.setList(list);
   document.addEventListener("DOMContentLoaded", () => {

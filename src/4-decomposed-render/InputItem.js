@@ -25,6 +25,7 @@ class InputItem {
           props: {
             oninput: (e) => this.onInputHandler(e.target.value),
             classList: this.error ? ["error"] : [],
+            value: this.name,
           },
         },
         {

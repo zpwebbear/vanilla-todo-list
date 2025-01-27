@@ -1,7 +1,7 @@
 const commonInterpreter = (tag) => {
   return (props) => {
     const element = document.createElement(tag);
-    const { classList, innerText, innerHTML, onclick, oninput } = props ?? {};
+    const { classList, innerText, innerHTML, onclick, oninput, value } = props ?? {};
     if (classList) {
       classList.forEach((className) => element.classList.add(className));
     }
@@ -10,6 +10,9 @@ const commonInterpreter = (tag) => {
     }
     if (innerHTML) {
       element.innerHTML = innerHTML;
+    }
+    if (value) {
+      element.value = value;
     }
     if (onclick) {
       element.addEventListener("click", onclick);
