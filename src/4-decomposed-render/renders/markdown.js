@@ -37,8 +37,8 @@ const getInterpretator = (tag) => {
   return interpretators[tag] ?? ((props) => null);
 };
 
-const createDomTree = (element) => {
-  const { tag, props, children = [] } = element;
+export const markdownRender = (node) => {
+  const { tag, props, children = [] } = node;
   const interpretator = getInterpretator(tag);
   const el = interpretator(props);
   if (!el) return null;
@@ -47,20 +47,3 @@ const createDomTree = (element) => {
   });
   return el;
 };
-
-const registerApp = (App, rootSelector) => {
-  document.addEventListener("DOMContentLoaded", () => {
-    const root = document.querySelector(rootSelector);
-    const app = new App();
-    const elementTree = app.render();
-    const domTree = createDomTree(elementTree);
-    root.appendChild(domTree);
-    document.addEventListener("Render", () => {
-      const elementTree = app.render();
-      const domTree = createDomTree(elementTree);
-      root.replaceChildren(domTree);
-    });
-  });
-};
-
-export { registerApp };
