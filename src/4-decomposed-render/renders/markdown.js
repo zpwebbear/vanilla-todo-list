@@ -1,36 +1,39 @@
-const commonInterpreter = (tag) => {
-  return (props) => {
-    const element = document.createElement(tag);
-    const { classList, innerText, innerHTML, onclick, oninput, value } = props ?? {};
-    if (classList) {
-      classList.forEach((className) => element.classList.add(className));
-    }
-    if (innerText) {
-      element.innerText = innerText;
-    }
-    if (innerHTML) {
-      element.innerHTML = innerHTML;
-    }
-    if (value) {
-      element.value = value;
-    }
-    if (onclick) {
-      element.addEventListener("click", onclick);
-    }
-    if (oninput) {
-      element.addEventListener("input", oninput);
-    }
-    return element;
-  };
+const divInterpreter = (props) => {
+  return "\n\n";
+};
+
+const pInterpreter = (props) => {
+  return "\n\n";
+};
+
+const ulInterpreter = (props) => {
+  return "\n\n";
+};
+
+const liInterpreter = (props) => {
+  return "\n* " + (props?.innerText ?? "");
+};
+
+const spanInterpreter = (props) => {
+  return props?.innerText ?? "";
+};
+
+const inputInterpreter = (props) => {
+  return "";
+};
+
+const buttonInterpreter = (props) => {
+  return props?.innerText ?? "";
 };
 
 const interpretators = {
-  div: commonInterpreter("div"),
-  ul: commonInterpreter("ul"),
-  li: commonInterpreter("li"),
-  span: commonInterpreter("span"),
-  input: commonInterpreter("input"),
-  button: commonInterpreter("button"),
+  div: divInterpreter,
+  p: pInterpreter,
+  ul: ulInterpreter,
+  li: liInterpreter,
+  span: spanInterpreter,
+  input: inputInterpreter,
+  button: buttonInterpreter,
 };
 
 const getInterpretator = (tag) => {
@@ -38,12 +41,13 @@ const getInterpretator = (tag) => {
 };
 
 export const markdownRender = (node) => {
+  let markdown = "";
   const { tag, props, children = [] } = node;
   const interpretator = getInterpretator(tag);
-  const el = interpretator(props);
-  if (!el) return null;
+  const r = interpretator(props);
+  markdown += r;
   children.filter(Boolean).forEach((child) => {
-    el.appendChild(createDomTree(child));
+    markdown += markdownRender(child);
   });
-  return el;
+  return markdown;
 };

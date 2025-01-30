@@ -1,9 +1,10 @@
 import "./style.css";
-//import { registerTodoList } from "./2-composite.js";
-//import { registerTodoList } from "./3-mediator.js";
 import { mountHtmlApp } from "./4-decomposed-render/mountHtmlApp.js";
-import { htmlRender } from "./4-decomposed-render/renders/html.js";
+import { mountMarkdownString } from "./4-decomposed-render/mountMarkdownString.js";
+import { domRender } from "./4-decomposed-render/renders/dom.js";
+import { markdownRender } from "./4-decomposed-render/renders/markdown.js";
 import { App } from "./4-decomposed-render/App.js";
 
-//registerTodoList("#app");
-mountHtmlApp(htmlRender, App, {rootSelector: "#app"});
+mountHtmlApp(domRender, App, { rootSelector: "#app" });
+//mountMarkdownString(markdownRender, App, { rootSelector: "#app" });
+

@@ -37,13 +37,13 @@ const getInterpretator = (tag) => {
   return interpretators[tag] ?? ((props) => null);
 };
 
-export const htmlRender = (node) => {
+export const domRender = (node) => {
   const { tag, props, children = [] } = node;
   const interpretator = getInterpretator(tag);
   const el = interpretator(props);
   if (!el) return null;
   children.filter(Boolean).forEach((child) => {
-    el.appendChild(htmlRender(child));
+    el.appendChild(domRender(child));
   });
   return el;
 };
